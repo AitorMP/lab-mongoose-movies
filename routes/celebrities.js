@@ -1,12 +1,13 @@
 const express = require('express');
-const Celebrity = require('../models/celebrity');
+const Celebrity = require('./../models/celebrity');
 
-const router = new express.Router();
+const celebritiesRouter = new express.Router();
 
-router.get('/', (req, res, next) => {
-  Celebrity.find()
+celebritiesRouter.get('/', (req, res, next) => {
+  console.log('AAA');
+  Celebrity.find({})
     .then((celebrities) => {
-      res.render('celebrities/index', { celebrities });
+      res.render('celebrities', { celebrities });
     })
     .catch((error) => {
       // Sending the error to the catch all handler
@@ -14,11 +15,22 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('celebrities/create', (req, res, next) => {
+celebritiesRouter.get('/create', (req, res, next) => {
+  console.log('BBB');
   res.render('celebrities/create');
 });
 
-router.get('celebrities/:id/edit', (req, res, next) => {
+celebritiesRouter.get('/:id', (req, res, next) => {
+  console.log('CCC');
+  Celebrity.findById(req.params.id)
+    .then((celebrity) => {
+      res.render('celebrities/show', { celebrity });
+    })
+    .catch((error) => next(error));
+});
+
+celebritiesRouter.get('/:id/edit', (req, res, next) => {
+  console.log('DDD');
   const { id } = req.params;
   Celebrity.findById(id)
     .then((celebrity) => {
@@ -29,20 +41,4 @@ router.get('celebrities/:id/edit', (req, res, next) => {
     });
 });
 
-router.get('/celebrities/:id', (req, res, next) => {
-  const { id } = req.params;
-  Celebrity.findById(id)
-    .then((celebrity) => {
-      res.render('celebrities/show', { celebrity });
-    })
-    .catch((error) => {
-      // Sending the error to the catch all handler
-      next(error);
-    });
-});
-
-router.get('/', (req, res, next) => {
-  res.render('index');
-});
-
-module.exports = router;
+module.exports = celebritiesRouter;

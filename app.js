@@ -37,8 +37,6 @@ const celebritiesRouter = require('./routes/celebrities');
 app.use('/', baseRouter);
 app.use('/celebrities', celebritiesRouter);
 
-1;
-
 // Catch 404 and render a not-found.hbs template
 app.use((req, res, next) => {
   res.status(404);
